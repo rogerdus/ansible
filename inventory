@@ -1,2 +1,2 @@
-10.210.7.171
-10.210.7.150
+10.210.7.171 apache_package=apache2 php_package=libapache2-mod-php
+10.210.7.150 apache_package=apache2 php_package=libapache2-mod-php
