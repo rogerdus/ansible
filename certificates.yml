@@ -1,0 +1,36 @@
+---
+
+ - hosts: all
+   become: true
+   pre_tasks:
+
+   - name: install updates (CentOS)
+     tags: always
+     dnf:
+       update_only: yes
+       update_cache: yes
+     when: ansible_distribution == "CentOS"
+
+   - name: install updates (Ubuntu)
+     tags: always
+     apt:
+       upgrade: dist
+       update_cache: yes
+     when: ansible_distribution == "Ubuntu"
+
+   - name: change e-mail address for admin
+     tags: apache, centos, httpd
+     lineinfile:
+        path: /etc/httpd/conf/httpd.conf
+        regexp: '^ServerAdmin'
+        line: ServerAdmin rinterino@fiscaliaedomex.gob.mx
+        backup: yes
+     register: httpd
+
+   - name: restart httpd (CentOS)
+     tags: apache, centos, httpd
+     service:
+       name: httpd
+       state: restarted
+     when: httpd.changed
+
